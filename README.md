@@ -10,3 +10,12 @@
   pip install subprocess
   pip install pyperclip
   </code></pre>
+
+2. NaverShopping_Product Crawler
+<pre><code>
+  pip install pandas
+  pip install urllib
+  pip install bs4
+  pip install json
+  pip install xlsxwriter
+  </code></pre>
