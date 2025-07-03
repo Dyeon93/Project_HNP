@@ -2,3 +2,11 @@
 
 - 2025.06.30 오늘의집 모음전 관련하여 제품 상세페이지 Column 추가해야함.
 - 2025.07.03 네이버쇼핑 상품 크롤러 등록
+
+## Install Module List
+1. Illerstrator_OutLine Maker
+<pre><code>
+  pip install pyautogui
+  pip install subprocess
+  pip install pyperclip
+  </code></pre>
