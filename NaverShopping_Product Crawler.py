@@ -18,7 +18,6 @@ def gen_search_url(api_node, search_text, start_num, disp_num):
 
     return base + node + param_query + param_start + param_disp
 
-
 import json
 import datetime
 from urllib.request import Request
@@ -34,8 +33,14 @@ def get_result_onpage(url):
 
 import pandas as pd
 
+def delete_tag(input_str):
+    input_str = input_str.replace('<b>', '')
+    input_str = input_str.replace('</b>', '')
+    return input_str
+
 def get_fields(json_data):
-    title = [each['title'] for each in json_data['items']]
+    title = [delete_tag(each['title']) for each in json_data['items']]
+    image = [each['image'] for each in json_data['items']]
     link = [each['link'] for each in json_data['items']]
     lprice = [each['lprice'] for each in json_data['items']]
     brand = [each['brand'] for each in json_data['items']]
@@ -43,11 +48,12 @@ def get_fields(json_data):
 
     result_pd = pd.DataFrame({
         'title': title,
+        'image' : image,
         'link': link,
         'lprice': lprice,
         'brand': brand,
         'category': category
-    }, columns=['title', 'brand', 'lprice', 'category', 'link'])
+    }, columns=['image', 'title', 'brand', 'lprice', 'category', 'link'])
 
     return result_pd
 
@@ -62,30 +68,6 @@ for n in range(1, 300, 100):
 
 result_mol = pd.concat(result_mol)
 
-def delete_tag(input_str):
-    input_str = input_str.replace('<b>', '')
-    input_str = input_str.replace('</b>', '')
-    return input_str
-
-import pandas as pd
-
-def get_fields(json_data):
-    title = [delete_tag(each['title']) for each in json_data['items']]
-    link = [each['link'] for each in json_data['items']]
-    lprice = [each['lprice'] for each in json_data['items']]
-    brand = [each['brand'] for each in json_data['items']]
-    category = [each['category4'] for each in json_data['items']]
-
-    result_pd = pd.DataFrame({
-        'title': title,
-        'link': link,
-        'lprice': lprice,
-        'brand': brand,
-        'category': category
-    }, columns=['title', 'brand', 'lprice', 'category', 'link'])
-
-    return result_pd
-
 result_mol.reset_index(drop=True, inplace=True)
 result_mol['lprice'] = result_mol['lprice'].astype('float')
 
@@ -99,10 +81,11 @@ with pd.ExcelWriter(f'./{lt.tm_year}.{lt.tm_mon}.{lt.tm_mday}_네이버쇼핑_{s
 
 	# 셀 너비 지정
     worksheet.set_column('A:A', 4)
-    worksheet.set_column('B:B', 60)
-    worksheet.set_column('C:C', 10)
+    worksheet.set_column('B:B', 10)
+    worksheet.set_column('C:C', 60)
     worksheet.set_column('D:D', 10)
     worksheet.set_column('E:E', 10)
-    worksheet.set_column('F:F', 50)
+    worksheet.set_column('F:F', 10)
+    worksheet.set_column('G:G', 50)
 
-    worksheet.conditional_format('D2:D1001', {'type': '3_color_scale'})
+    worksheet.conditional_format('E2:E301', {'type': '3_color_scale'})
