@@ -2,6 +2,9 @@ from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 import pandas as pd
 import urllib.parse
+from openpyxl import load_workbook
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import Alignment
 import time
 
 search_word = input("검색어 입력: ")
@@ -95,14 +98,66 @@ with sync_playwright() as p:
 
     browser.close()
 
-# 저장
 df = pd.DataFrame(collected_data)
-df["rank"] = df.index + 1
 
+# === 1. 크롤링 순위 추가 및 컬럼 순서 조정 ===
+df["rank"] = df.index + 1
 cols = df.columns.tolist()
 cols.insert(0, cols.pop(cols.index("rank")))
 df = df[cols]
 
+# === 2. 파일 저장 ===
 lt = time.localtime()
-df.to_excel(f"{lt.tm_year}.{lt.tm_mon}.{lt.tm_mday}_쿠팡_{search_word}_상품정보_Playwright.xlsx", index=False)
-print(f"\n✅ 수집 완료! 총 {len(collected_data)}개 상품 저장됨.")
+filename = f"{lt.tm_year}.{lt.tm_mon}.{lt.tm_mday}_쿠팡_{search_word}_상품정보_Playwright.xlsx"
+df.to_excel(filename, index=False)
+
+# === 3. openpyxl 로드 ===
+wb = load_workbook(filename)
+ws = wb.active
+
+# === 4. C열(name)에 하이퍼링크 삽입 ===
+for row in range(2, 2 + len(df)):
+    name = df.loc[row - 2, "name"]
+    link = df.loc[row - 2, "link"]
+
+    cell = ws.cell(row=row, column=3)  # C열
+    cell.value = name
+    cell.hyperlink = link
+    cell.style = "Hyperlink"
+
+# === 5. 'link' 컬럼 제거 ===
+link_col_index = df.columns.get_loc("link") + 1
+ws.delete_cols(link_col_index)
+
+# === 6. 셀 너비 자동 조절 + B열은 고정 ===
+for col_idx, column_cells in enumerate(ws.iter_cols(min_row=1, max_row=ws.max_row), start=1):
+    col_letter = get_column_letter(col_idx)
+
+    if col_letter == "B":
+        ws.column_dimensions[col_letter].width = 13  # B열은 고정
+        continue
+
+    max_length = 0
+    for cell in column_cells:
+        try:
+            cell_value = str(cell.value)
+            max_length = max(max_length, len(cell_value))
+        except:
+            pass
+
+    adjusted_width = max_length + 2
+    ws.column_dimensions[col_letter].width = adjusted_width
+
+# === 7. 행 높이 조정 (1행 제외) ===
+for row in range(2, ws.max_row + 1):
+    ws.row_dimensions[row].height = 70  # 데이터 행만 높이 조정
+
+# === 8. 셀 정렬 설정 (가로 왼쪽, 세로 가운데) ===
+for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=ws.max_column):
+    for cell in row:
+        cell.alignment = Alignment(vertical='center')
+
+# === 9. 저장 완료 ===
+wb.save(filename)
+
+print(f"\n✅ 엑셀 저장 완료! → {filename}")
