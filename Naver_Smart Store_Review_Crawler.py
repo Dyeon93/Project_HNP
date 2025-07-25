@@ -30,9 +30,9 @@ driver = webdriver.Chrome(service=service, options=options)
 
 # URL 접속
 driver.get(url)
-time.sleep(20)
+time.sleep(15)
 driver.refresh()
-time.sleep(3)
+time.sleep(15)
 
 # 리뷰탭 클릭
 try:
