@@ -4,6 +4,7 @@
 - 2025.07.03 네이버쇼핑 상품 크롤러 등록
 - 2025.07.15 오늘의집 크롤링 모듈 변경
 - 2025.07.25 쿠팡 상품 크롤러 등록 및 오늘의집 크롤러 openpyxl 모듈추가
+- 2025.07.29 쿠팡 리뷰 크롤러 등록
 
 -----
 
@@ -57,6 +58,13 @@
   pip install openpyxl
   </code></pre>
 
+7. Coupang_Product_Crawler
+<pre><code>
+  pip install pandas
+  pip install bs4
+  pip install playwright
+  </code></pre>
+
 -----
 
 ## How To Use
@@ -85,6 +93,8 @@
 - Ohou_Review_Crawler
 
 - Coupang_Product_Crawler
+
+- Coupang_Review_Crawler
 
 -----
 
