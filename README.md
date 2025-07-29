@@ -115,21 +115,21 @@
 ## Notice
 <H4>Crawler</H4>
 
-- Chorme Driver 최신버전으로 항상 업데이트 할 것
+- *Chorme Driver* **최신버전**으로 항상 업데이트 할 것
 - Playwright 모듈의 경우 Chrome Driver가 필요 없습니다. 추후 Naver_Product_Crawler도 Playwright모듈로 변경 예정
 
 <H4>In Excel</H4>
 
-- Image URL 매크로: <code>Excel_User_Funtions/URL Image Insert.txt</code>의 코드를 복사해서 Excel 개발자도구 → 삽입 → 모듈 → 붙여넣기 → 저장 후 개발도구의 매크로에서 실행
+- **Image URL 매크로**: <code>Excel_User_Funtions/URL Image Insert.txt</code>의 코드를 복사해서 Excel 개발자도구 → 삽입 → 모듈 → 붙여넣기 → 저장 후 개발도구의 매크로에서 실행
   - **크롤링 기준으로 만들어진 코드이기 때문에 B열 2행부터 하나씩 이미지로 변환 후 정렬 및 Cell 내용 삭제까지 해줍니다.** 만약 B열이 아닌 다른열에 이미지 URL이 있다면, 매크로 코드에서 수정해야합니다.
    
-- Split: <code>Excel_User_Funtions/PySplit.txt</code>의 코드를 복사해서 Excel 개발자도구 → 삽입 → 모듈 → 붙여넣기 → 저장 후 엑셀내에서 <code>=PySplit()</code> 함수로 사용
+- **Split**: <code>Excel_User_Funtions/PySplit.txt</code>의 코드를 복사해서 Excel 개발자도구 → 삽입 → 모듈 → 붙여넣기 → 저장 후 엑셀내에서 <code>=PySplit()</code> 함수로 사용
   - **Python에서 Split함수와 동일한 기능을 구사**하며, <code>=PySplit(대상,구분자,인덱스)</code>순으로 입력
   - 대상: Cell의 주소를 참조
   - 구분자: ""를 통해 텍스트 참조
   - 인덱스: 구분자를 기준으로 텍스트를 나누어 몇번째에 위치한 값을 가져올지 결정 **(0부터 시작)**
 
-- RegexExtract: <code>Excel_User_Funtions/RegexExtract.txt</code>의 코드를 복사해서 Excel 개발자도구 → 삽입 → 모듈 → 붙여넣기 → 저장 후 엑셀내에서 <code>=RegexExtract()</code> 함수로 사용
+- **RegexExtract**: <code>Excel_User_Funtions/RegexExtract.txt</code>의 코드를 복사해서 Excel 개발자도구 → 삽입 → 모듈 → 붙여넣기 → 저장 후 엑셀내에서 <code>=RegexExtract()</code> 함수로 사용
   - **RE모듈과 동일한 기능을 구사**하며, <code>=RegexExtract(대상,패턴)</code>순으로 입력
   - 대상: Cell의 주소를 참조
   - 패턴: RE모듈과 동일한 패턴을 참조
