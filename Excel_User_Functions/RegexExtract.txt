@@ -1,0 +1,23 @@
+Function RegexExtract(cell As Range, pattern As String) As String
+    Dim regex As Object
+    Dim matches As Object
+
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.Pattern = pattern
+    regex.IgnoreCase = True
+    regex.Global = False
+
+    On Error GoTo ErrorHandler
+
+    If regex.Test(cell.Value) Then
+        Set matches = regex.Execute(cell.Value)
+        RegexExtract = matches(0).SubMatches(0) ' 첫 번째 그룹(괄호로 묶은 부분)만 반환
+    Else
+        RegexExtract = ""
+    End If
+
+    Exit Function
+
+ErrorHandler:
+    RegexExtract = "#ERROR"
+End Function

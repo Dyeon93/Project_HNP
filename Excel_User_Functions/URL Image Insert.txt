@@ -1,0 +1,50 @@
+Sub InsertImagesAndCenterInCell()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim cell As Range
+    Dim img As Picture
+    Dim imgURL As String
+    Dim targetLeft As Double, targetTop As Double
+    Dim maxWidth As Double, maxHeight As Double
+    Dim marginFactor As Double
+
+    Set ws = ActiveSheet
+
+    ' 셀 크기보다 약간 작게 (예: 90%)
+    marginFactor = 0.9
+
+    ' B열 기준 마지막 행
+    lastRow = ws.Cells(ws.Rows.Count, "B").End(xlUp).Row
+
+    ' B2부터 마지막 셀까지 반복
+    For Each cell In ws.Range("B2:B" & lastRow)
+        imgURL = cell.Value
+        If imgURL <> "" Then
+            On Error Resume Next
+            Set img = ws.Pictures.Insert(imgURL)
+            If Not img Is Nothing Then
+                With img
+                    .Placement = xlMoveAndSize
+                    .ShapeRange.LockAspectRatio = msoTrue
+
+                    ' 셀 크기에 맞춰 비율 유지하면서 축소 (마진 적용)
+                    maxHeight = cell.Height * marginFactor
+                    maxWidth = cell.Width * marginFactor
+                    If .Width > maxWidth Then .Width = maxWidth
+                    If .Height > maxHeight Then .Height = maxHeight
+
+                    ' 셀 내 가운데 정렬
+                    targetLeft = cell.Left + (cell.Width - .Width) / 2
+                    targetTop = cell.Top + (cell.Height - .Height) / 2
+                    .Left = targetLeft
+                    .Top = targetTop
+                End With
+            End If
+            Set img = Nothing
+            On Error GoTo 0
+
+            ' URL 제거
+            cell.ClearContents
+        End If
+    Next cell
+End Sub

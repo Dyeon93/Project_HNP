@@ -1,0 +1,18 @@
+Function PySplit(strText As String, Optional delimiter As String = " ", Optional index As Variant) As Variant
+    Dim arr() As String
+    
+    '구분자를 기준으로 문자열 나누기
+    arr = Split(strText, delimiter)
+    
+    'index가 지정되지 않았다면 전체 배열을 반환
+    If IsMissing(index) Then
+        PySplit = arr
+    Else
+        '배열 범위 초과 체크
+        If index >= 0 And index <= UBound(arr) Then
+            PySplit = arr(index)
+        Else
+            PySplit = CVErr(xlErrValue) '인덱스 초과 시 #VALUE! 오류 반환
+        End If
+    End If
+End Function
